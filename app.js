@@ -4,6 +4,7 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 const { sequelize } = require("./models");
+require("dotenv").config()
 
 app.use(cors())
 

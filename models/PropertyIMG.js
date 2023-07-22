@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             field: 'property_img'
         },
+        img_type: {
+            type: DataTypes.STRING,
+            field: 'img_type'
+        },
         isDelete: {
             type: DataTypes.BOOLEAN,
             field: 'isDelete',
