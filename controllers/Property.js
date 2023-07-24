@@ -215,6 +215,28 @@ exports.getPropertyImg = async (req, res) => {
     }
 }
 
+exports.getPropertyImgById = async (req, res) => {
+    var data = await PropertyIMG.findAll(
+        {
+            where:
+            {
+                prop_id: req.body.prop_id,
+                isDelete: false
+            }
+        }
+    )
+    if (data) {
+        res.status(200).send({
+            message: "Prop IMG",
+            data
+        })
+    } else {
+        res.status(404).send({
+            message: "Data Not Found",
+        })
+    }
+}
+
 exports.addPropImg = async (req, res) => {
     try {
         const id = parseInt(req.params.id)
