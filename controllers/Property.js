@@ -167,13 +167,19 @@ exports.getPropertyImg = async (req, res) => {
         var data = await PropertyIMG.findAll(
             {
                 where:
-                    { prop_id: req.body.prop_id, isDelete: true }
+                {
+                    prop_id: req.body.prop_id,
+                    isDelete: true
+                }
             }
         )
         if (data.length === 0) {
             data = await PropertyIMG.findAll({
                 where:
-                    {prop_id: req.body.prop_id, isDelete: true }
+                {
+                    prop_id: req.body.prop_id,
+                    isDelete: true
+                }
             })
             function removeDuplicates(array, property) {
                 const uniqueArray = [];
