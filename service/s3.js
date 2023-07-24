@@ -3,7 +3,7 @@ const { S3 } = require('aws-sdk')
 exports.imageUpload = async (file) => {
     const s3 = new S3()
     const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
+        Bucket: welkins-capital-bucket,
         Key: `property/${file.originalname}`,
         Body: file.buffer,
         ContentType: 'image/png',
