@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             })
         }
     }
-
+    
     Property.init({
         property_name: {
             type: DataTypes.STRING,
@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         facility: {
             type: DataTypes.STRING,
             field: 'facuility'
+        },
+        status: {
+            type: DataTypes.STRING,
+            field: 'status'
         },
         isDelete: {
             type: DataTypes.BOOLEAN,
