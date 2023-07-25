@@ -16,7 +16,7 @@ router.post('/delete', verify.validateToken, propertyControler.deleteProperty)
 //     propertyControler.uploadImg
 // )
 router.post('/getImg', propertyControler.getPropertyImg)
-router.post('/getImgById', verify.validateToken, propertyControler.getPropertyImgById)
+router.post('/getImgById', propertyControler.getPropertyImgById)
 router.post('/deleteimg', verify.validateToken, propertyControler.deleteImg)
 router.post('/upload/:id', verify.validateToken, imgUpload.upload.single('property'), propertyControler.addPropImg)
 
