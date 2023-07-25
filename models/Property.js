@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             })
         }
     }
-    
+
     Property.init({
         property_name: {
             type: DataTypes.STRING,
@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
             field: 'facuility'
         },
         status: {
+            type: DataTypes.STRING,
+            field: 'status'
+        },
+        desc: {
             type: DataTypes.STRING,
             field: 'status'
         },
