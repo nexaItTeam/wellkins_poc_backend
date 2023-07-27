@@ -9,6 +9,7 @@ exports.getAllenquery = async (req, res) => {
             },
             limit: req.body.limit,
             offset: req.body.offset,
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: model.Property,

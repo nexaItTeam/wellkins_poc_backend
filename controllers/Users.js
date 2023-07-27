@@ -82,6 +82,7 @@ exports.getAllUser = async (req, res) => {
             where: {
                 isDelete: false
             },
+            order: [['createdAt', 'DESC']],
             limit: req.body.limit,
             offset: req.body.offset
         })
