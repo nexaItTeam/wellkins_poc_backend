@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             field: 'contact_no'
         },
         client_id: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             field: 'client_id'
         },
         isDelete: {

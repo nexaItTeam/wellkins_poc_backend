@@ -5,7 +5,6 @@ const { createTokens } = require("../middleware/JWT")
 const generateUniqueId = require('generate-unique-id');
 const { mailGenerator } = require('../service/nodemailer')
 
-
 exports.createClient = async (req, res) => {
     try {
         const { client } = req.body
@@ -39,7 +38,6 @@ exports.createClient = async (req, res) => {
                             accessToken
                         })
                     })
-
                 }).catch((err) => {
                     if (err) {
                         res.status(400).json({ error: err })
@@ -68,28 +66,114 @@ exports.clientLogin = async (req, res) => {
             return res.status(400).json({ message: "User not found" })
         } else {
             const dbPassword = find_user.password
-            bcrypt.compare(login.password, dbPassword).then((match) => {
-                if (!match) {
-                    res.status(400).json({
-                        error: "Wrong Credential!"
-                    })
-                } else {
-                    const accessToken = createTokens(login)
-                    if (accessToken) {
-                        return res.status(200).json({
-                            message: "User login successful",
-                            user: find_user,
-                            accessToken
+            await bcrypt.compare(login.password, dbPassword)
+                .then((match) => {
+                    if (!match) {
+                        res.status(400).json({
+                            error: "Wrong Credential!"
                         })
+                    } else {
+                        const accessToken = createTokens(login)
+                        if (accessToken) {
+                            return res.status(200).json({
+                                message: "User login successful",
+                                user: find_user,
+                                accessToken
+                            })
+                        }
                     }
-                }
-            })
+                })
         }
     } catch (error) {
-        console.log("error", error)
         res.status(500).json({
             message: "Server Error",
             error
         })
     }
 }
+
+exports.getClient = async (req, res) => {
+    try {
+        var getClient = await Client.findAndCountAll({
+            where: {
+                isDelete: false
+            },
+            limit: req.body.limit,
+            offset: req.body.offset
+        })
+
+        if (!getClient) {
+            return res.status(404).json({
+                message: "Something went wrong"
+            })
+        } else {
+            return res.status(200).json({
+                message: "Success",
+                getClient
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
+exports.updateClient = async (req, res) => {
+    try {
+        const { client } = req.body
+        var update_client = await Client.update(
+            client,
+            {
+                where: {
+                    id: client.id
+                }
+            }
+        )
+        return res.status(200).send({
+            message: "update post",
+            update_client
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
+exports.deleteClient = async (req, res) => {
+    try {
+        const data = await Client.findAll({
+            where: {
+                id: req.body.id
+            }
+        })
+        if (!data) {
+            return res.status(404).json({
+                message: "post not found"
+            })
+        } else {
+            const update_form = await Client.update({
+                isDelete: true
+            },
+                {
+                    where: {
+                        id: req.body.id
+                    }
+                }
+            )
+            return res.status(200).send({
+                message: "Client deleted successfully",
+                update_form
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
