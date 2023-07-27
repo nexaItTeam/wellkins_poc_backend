@@ -7,7 +7,7 @@ exports.getAllProperty = async (req, res) => {
             where: {
                 isDelete: false
             },
-            order: [['createdAt', 'DESC']],
+            // order: [['createdAt', 'DESC']],
             limit: req.body.limit,
             offset: req.body.offset
         })
