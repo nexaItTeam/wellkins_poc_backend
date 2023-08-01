@@ -29,6 +29,27 @@ exports.getEnqForm = async (req, res) => {
     }
 }
 
+exports.find_client = async (req, res) => {
+    try {
+        const find_form = await Enquiry_form.findOne({
+            where: {
+                client_id: req.body.client_id
+            }
+        })
+        if (find_form) {
+            return res.status(400).json({ message: "User not allow to fill form again", "isAllow": false })
+        } else {
+            return res.status(200).json({ message: "User allow to fill form", "isAllow": true })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
 exports.addEnqForm = async (req, res) => {
     try {
         const { enq_form } = req.body

@@ -29,7 +29,8 @@ exports.createClient = async (req, res) => {
                     var mail_body = {
                         client_email: client.client_email,
                         password: pass,
-                        client_id: id
+                        client_id: id,
+                        temp_id:createUser.id
                     }
                     await mailGenerator(mail_body).then(() => {
                         return res.status(200).json({

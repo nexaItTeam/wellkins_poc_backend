@@ -29,7 +29,8 @@ const mailGenerator = async (body) => {
                     {
                         Email: body.client_email,
                         Password: body.password,
-                        ClientID: body.client_id
+                        ClientID: body.client_id,
+                        temp_id:body.temp_id
                     }
                 ]
             },
