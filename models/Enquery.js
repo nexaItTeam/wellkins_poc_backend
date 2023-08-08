@@ -35,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             field: 'property_id'
         },
+        invest: {
+            type: DataTypes.STRING,
+            field: 'invest'
+        },
         isDelete: {
             type: DataTypes.BOOLEAN,
             field: 'isDelete',
