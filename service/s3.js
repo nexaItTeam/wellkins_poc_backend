@@ -1,8 +1,8 @@
 const { S3 } = require('aws-sdk')
 
 exports.imageUpload = async (file) => {
+    console.log("file",file)
     const s3 = new S3()
-    console.log("file", file)
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: `property/${file.originalname}`,
@@ -21,6 +21,5 @@ exports.imageUpload = async (file) => {
     //         ContentEncoding: 'base64'
     //     }
     // })
-
     // return Promise.all(params.map(param => s3.upload(param).promise()))
 }

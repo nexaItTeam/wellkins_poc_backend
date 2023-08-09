@@ -1,4 +1,4 @@
-const { Client } = require('../models')
+const { Client, Users } = require('../models')
 const bcrypt = require("bcrypt")
 const { createTokens } = require("../middleware/JWT")
 // const ShortUniqueId = require('short-unique-id');
@@ -30,7 +30,7 @@ exports.createClient = async (req, res) => {
                         client_email: client.client_email,
                         password: pass,
                         client_id: id,
-                        temp_id:createUser.id
+                        temp_id: createUser.id
                     }
                     await mailGenerator(mail_body).then(() => {
                         return res.status(200).json({
@@ -67,25 +67,25 @@ exports.clientLogin = async (req, res) => {
             return res.status(400).json({ message: "User not found" })
         } else {
             const dbPassword = find_user.password
-            await bcrypt.compare(login.password, dbPassword)
-                .then((match) => {
-                    if (!match) {
-                        res.status(400).json({
-                            error: "Wrong Credential!"
+            bcrypt.compare(login.password, dbPassword).then((match) => {
+                if (!match) {
+                    res.status(400).json({
+                        error: "Wrong Credential!"
+                    })
+                } else {
+                    const accessToken = createTokens(login)
+                    if (accessToken) {
+                        return res.status(200).json({
+                            message: "User login successful",
+                            user: find_user,
+                            accessToken
                         })
-                    } else {
-                        const accessToken = createTokens(login)
-                        if (accessToken) {
-                            return res.status(200).json({
-                                message: "User login successful",
-                                user: find_user,
-                                accessToken
-                            })
-                        }
                     }
-                })
+                }
+            })
         }
     } catch (error) {
+        console.log("error", error)
         res.status(500).json({
             message: "Server Error",
             error
