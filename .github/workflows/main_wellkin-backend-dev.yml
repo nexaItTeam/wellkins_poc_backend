@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'wellkin-backend-dev'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D429FD1F77F47C58A7E9288C885F89E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_51DC623B81DA4C7BB413BEAC4E1B54C0 }}
           package: .
