@@ -1,5 +1,5 @@
 var bodyParser = require("body-parser")
-const routes = require('./routes/api')
+// const routes = require('./routes/api')
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -21,7 +21,7 @@ app.use("/uploades", express.static("uploades"))
 // })
 
 
-app.use('/api', routes)
+// app.use('/api', routes)
 
 app.get('/get', async (req, res) => {
     return res.status(200).json({ msg: "working success" });
