@@ -1,5 +1,5 @@
 const { Property, PropertyIMG } = require('../models')
-const s3 = require('../service/s3')
+// const s3 = require('../service/s3')
 
 exports.getAllProperty = async (req, res) => {
     try {
@@ -232,29 +232,29 @@ exports.getPropertyImgById = async (req, res) => {
     }
 }
 
-exports.addPropImg = async (req, res) => {
-    try {
-        const id = parseInt(req.params.id)
-        const file = req.file
-        const result = await s3.imageUpload(file)
-        var temp = {
-            "prop_id": id,
-            "property_img": result.Key,
-            "img_type": req.body.img_type
-        }
-        var upload_img = await PropertyIMG.create(temp)
-        if (upload_img) {
-            res.status(200).json({
-                message: "Success upload",
-            })
-        }
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            message: "Server Error",
-            error
-        })
-    }
-}
+// exports.addPropImg = async (req, res) => {
+//     try {
+//         const id = parseInt(req.params.id)
+//         const file = req.file
+//         const result = await s3.imageUpload(file)
+//         var temp = {
+//             "prop_id": id,
+//             "property_img": result.Key,
+//             "img_type": req.body.img_type
+//         }
+//         var upload_img = await PropertyIMG.create(temp)
+//         if (upload_img) {
+//             res.status(200).json({
+//                 message: "Success upload",
+//             })
+//         }
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({
+//             message: "Server Error",
+//             error
+//         })
+//     }
+// }
 
 
