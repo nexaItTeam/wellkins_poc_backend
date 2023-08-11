@@ -12,13 +12,13 @@ let sequelize;
 // if (config.use_env_variable) {
 //     sequelize = new Sequelize(process.env[config.use_env_variable], config);
 // } else {
-sequelize = new Sequelize(config.database, config.user, config.password, {
-    database: "nexa_capital",
-    username: "admin",
-    host: "nexacapital.cwgna2ffcmzx.eu-north-1.rds.amazonaws.com",
+sequelize = new Sequelize({
+    database: "wellkin_capital_dev",
+    username: "azure_admin",
+    host: "wellkin-database-dev.mysql.database.azure.com",
     dialect: "mysql",
     port: "3306",
-    password: "wBFmf31Ooqm7ZNlKAB6x",
+    password: "Nexa@123",
 });
 if (sequelize) {
     console.log("connection with db")
