@@ -1,4 +1,5 @@
 const { Property, PropertyIMG } = require('../models')
+const { azureImgUpload } = require('../service/azure')
 // const s3 = require('../service/s3')
 
 exports.getAllProperty = async (req, res) => {
@@ -256,5 +257,18 @@ exports.getPropertyImgById = async (req, res) => {
 //         })
 //     }
 // }
+
+exports.uploadeImg = async (req, res) => {
+    try {
+        const file = req.file
+        const azure = await azureImgUpload(file)
+        console.log(azure)
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
 
 

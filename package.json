@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +24,7 @@
     "nodemailer": "^6.9.4",
     "nodemon": "^2.0.22",
     "sequelize": "^6.32.0",
-    "short-unique-id": "^4.4.4"
+    "short-unique-id": "^4.4.4",
+    "uuid": "^9.0.0"
   }
 }
