@@ -22,7 +22,7 @@ sequelize = new Sequelize({
 });
 if (sequelize) {
     console.log("connection with db")
-} else { 
+} else {
     console.log("can't connect with db")
 }
 
