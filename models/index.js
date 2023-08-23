@@ -13,7 +13,7 @@ let sequelize;
 //     sequelize = new Sequelize(process.env[config.use_env_variable], config);
 // } else {
 sequelize = new Sequelize({
-    database: "wellkin_capital_dev",
+    database: "nexa_capital",
     username: "azure_admin",
     host: "wellkin-database-dev.mysql.database.azure.com",
     dialect: "mysql",
