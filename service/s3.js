@@ -1,7 +1,7 @@
 const { S3 } = require('aws-sdk')
 
 exports.imageUpload = async (file) => {
-    console.log("file",file)
+    console.log("file", file)
     const s3 = new S3()
     const params = {
         Bucket: process.env.BUCKET_NAME,

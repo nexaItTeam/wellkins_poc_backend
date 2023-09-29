@@ -14,11 +14,11 @@ let sequelize;
 // } else {
 sequelize = new Sequelize({
     database: "nexa_capital",
-    username: "azure_admin",
-    host: "wellkin-database-dev.mysql.database.azure.com",
+    username: "wellkins_capital",
+    host: "wellkins-mysql-prod.mysql.database.azure.com",
     dialect: "mysql",
     port: "3306",
-    password: "Nexa@123",
+    password: "J8#p$R5mY@9Q",
 });
 if (sequelize) {
     console.log("connection with db")

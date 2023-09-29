@@ -1,9 +1,10 @@
-const { Client, Users } = require('../models')
+const { Client, Users, Password_reset } = require('../models')
 const bcrypt = require("bcrypt")
 const { createTokens } = require("../middleware/JWT")
 // const ShortUniqueId = require('short-unique-id');
 const generateUniqueId = require('generate-unique-id');
 const { mailGenerator } = require('../service/nodemailer')
+const { azureEmailService, forgotPassword, accountCreate } = require('../service/azureEmail')
 
 exports.createClient = async (req, res) => {
     try {
@@ -27,12 +28,13 @@ exports.createClient = async (req, res) => {
                 Client.create(client).then(async (createUser) => {
                     const accessToken = createTokens(createUser)
                     var mail_body = {
+                        client_name: client.full_name,
                         client_email: client.client_email,
                         password: pass,
                         client_id: id,
                         temp_id: createUser.id
                     }
-                    await mailGenerator(mail_body).then(() => {
+                    await accountCreate(mail_body).then(() => {
                         return res.status(200).json({
                             message: "Client register successful",
                             createUser,
@@ -53,6 +55,36 @@ exports.createClient = async (req, res) => {
             error
         })
     }
+}
+
+exports.createClients = async (req, res) => {
+    try {
+        const { clients } = req.body
+        clients.forEach(async (email) => {
+            console.log(email.client_email)
+            await findEmail(email.client_email).then((resp) => {
+                console.log(resp)
+            })
+        });
+
+        // const find_client = await Client.findOne({
+        //     where: {
+        //         client_email: clients[0].client_email
+        //     }
+        // })
+    } catch (error) {
+
+    }
+}
+
+const findEmail = async (email) => {
+    const find_email = await Client.findOne({
+        where: {
+            client_email: email
+        }
+    })
+
+    return find_email
 }
 
 exports.clientLogin = async (req, res) => {
@@ -179,3 +211,137 @@ exports.deleteClient = async (req, res) => {
     }
 }
 
+exports.sendEmail = async (req, res) => {
+    try {
+        // var mail_body = {
+        //     user_email: req.body.user_email,
+        //     Password: "",
+        //     ClientID: "",
+        //     temp_id: ""
+        // }
+        await azureEmailService(req.body).then(() => {
+            return res.status(200).json({
+                message: "mail send successfully",
+            })
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
+exports.sendOtp = async (req, res) => {
+    try {
+        const find_user = await Client.findOne({
+            where: {
+                client_email: req.body.email
+            }
+        })
+        if (!find_user) {
+            return res.status(400).json({ message: "Email not found" })
+        } else {
+            const otp = generateUniqueId({
+                length: 6,
+                useLetters: false
+            });
+            bcrypt.hash(otp, 10).then(async (hash) => {
+                var temp_1 = {
+                    "otp": hash,
+                    "email": req.body.email,
+                    "createdAt": Date.now(),
+                    "expireAt": Date.now() + 600000
+                }
+                const reset_pass = await Password_reset.create(temp_1)
+                if (reset_pass) {
+                    var temp = {
+                        "otp": otp,
+                        "email": req.body.email,
+                    }
+                    forgotPassword(temp).then(() => {
+                        res.status(200).json({
+                            message: "OTP sent on your email",
+                            id: reset_pass.id
+                        })
+                    }).catch((error) => {
+                        res.status(400).json({
+                            message: "OTP not able sent"
+                        })
+                    })
+                }
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
+exports.verifyOtp = async (req, res) => {
+    try {
+        const find_otp = await Password_reset.findOne({
+            where: {
+                id: req.body.id
+            }
+        })
+        if (!find_otp) {
+            return res.status(400).json({ message: "invalid otp not found" })
+        } else {
+            const time = new Date()
+            const otp = req.body.otp
+            if (find_otp.expireAt <= time) {
+                return res.status(200).json({ message: "OTP is Expired", isExpired: find_otp.expireAt <= time })
+            } else {
+                bcrypt.compare(otp, find_otp.otp).then((match) => {
+                    if (!match) {
+                        return res.status(200).json({ message: "OTP is not match" })
+                    } else {
+                        return res.status(200).json({ message: "OTP is Verified", isExpired: find_otp.expireAt <= time })
+                    }
+                })
+            }
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}
+
+exports.changePassword = async (req, res) => {
+    try {
+        const { client } = req.body
+        const find_client = await Client.findOne({
+            where: {
+                client_email: client.email
+            }
+        })
+        if (find_client) {
+            bcrypt.hash(client.password, 10).then(async (hash) => {
+                client.password = hash
+                console.log("client", client)
+                var update_client = await Client.update(
+                    client,
+                    {
+                        where: {
+                            id: find_client.id
+                        }
+                    }
+                )
+                return res.status(200).send({
+                    message: "update password",
+                    update_client
+                })
+            })
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: "Server Error",
+            error
+        })
+    }
+}

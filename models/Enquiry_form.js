@@ -1,11 +1,21 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class Enquiry_form extends Model { }
+    class Enquiry_form extends Model {
+        static associate(models) {
+            Enquiry_form.hasOne(models.Order, {
+                foreignKey: "enq_form_id",
+            })
+        }
+    }
     Enquiry_form.init({
         client_id: {
             type: DataTypes.INTEGER,
             field: 'client_id'
+        },
+        prop_id: {
+            type: DataTypes.INTEGER,
+            field: 'prop_id'
         },
         form_a: {
             type: DataTypes.JSON,
@@ -22,6 +32,31 @@ module.exports = (sequelize, DataTypes) => {
         form_d: {
             type: DataTypes.JSON,
             field: 'form_d'
+        },
+        form_e: {
+            type: DataTypes.JSON,
+            field: 'form_e'
+        },
+        form_f: {
+            type: DataTypes.JSON,
+            field: 'form_f'
+        },
+        form_g: {
+            type: DataTypes.JSON,
+            field: 'form_g'
+        },
+        form_h: {
+            type: DataTypes.JSON,
+            field: 'form_h'
+        },
+        investor_form_type: {
+            type: DataTypes.STRING,
+            field: 'investor_form_type'
+        },
+        isDraft: {
+            type: DataTypes.BOOLEAN,
+            field: 'isDraft',
+            defaultValue: false,
         },
         isDelete: {
             type: DataTypes.BOOLEAN,

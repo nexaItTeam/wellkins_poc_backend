@@ -4,12 +4,13 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "@azure/identity": "^3.2.4",
     "@azure/storage-blob": "^12.15.0",
     "bcrypt": "^5.1.0",
